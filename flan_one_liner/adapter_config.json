@@ -26,12 +26,12 @@
   "revision": null,
   "target_modules": [
     "wi_1",
-    "wi_0",
+    "wo",
     "q",
-    "o",
     "v",
-    "k",
-    "wo"
+    "o",
+    "wi_0",
+    "k"
   ],
   "target_parameters": null,
   "task_type": "SEQ_2_SEQ_LM",

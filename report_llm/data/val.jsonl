@@ -1,5 +1,7 @@
-{"task": "report", "prompt": "Güvenilirlik: 0.42, Etkili: 0.35, Spoof: 0.62. Türkçe açıklama yap:", "target": "Sinyal kalitesi zayıf olup belirsizlik düzeyi yüksektir. Tespit güvenilirliği sınırlıdır ve ek doğrulama gerekebilir."}
-{"task": "one_liner", "prompt": "Güvenilirlik: 0.88, Etkili: 0.83, Spoof: 0.08. Türkçe açıklama yap:", "target": "Çok güçlü hedef tespiti, sinyaller net."}
-{"task": "one_liner", "prompt": "Güvenilirlik: 0.80, Etkili: 0.81, Spoof: 0.01. Türkçe açıklama yap:", "target": "Orta seviye güvenilirlik sağlandı."}
-{"task": "one_liner", "prompt": "Güvenilirlik: 0.85, Etkili: 0.79, Spoof: 0.04. Türkçe açıklama yap:", "target": "Mükemmel tespit performansı."}
-{"task": "report", "prompt": "Güvenilirlik: 0.85, Etkili: 0.79, Spoof: 0.04. Türkçe açıklama yap:", "target": "Sistem yüksek performans göstermiştir. Tespit kalitesi mükemmel seviyededir ve güvenilirlik çok yüksektir."}
+{"task": "report", "prompt": "0.43 0.37 0.78", "target": "Belirsizlik seviyesi yüksek bulundu."}
+{"task": "report", "prompt": "0.38 0.32 0.68", "target": "Belirsizlik seviyesi yüksek bulundu."}
+{"task": "report", "prompt": "0.85 0.80 0.10", "target": "Yüksek güvenilirlikle tespit edildi."}
+{"task": "report", "prompt": "0.85 0.80 0.10", "target": "Yüksek güvenilirlikle tespit edildi."}
+{"task": "one_liner", "prompt": "0.80 0.75 0.01", "target": "Yüksek güvenilirlik."}
+{"task": "one_liner", "prompt": "0.50 0.43 0.65", "target": "Düşük güvenilirlik."}
+{"task": "report", "prompt": "0.83 0.78 0.01", "target": "Çok güçlü hedef tespiti gerçekleştirildi."}

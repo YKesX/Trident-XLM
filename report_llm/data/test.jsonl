@@ -1,5 +1,7 @@
-{"task": "report", "prompt": "Güvenilirlik: 0.78, Etkili: 0.85, Spoof: 0.20. Türkçe açıklama yap:", "target": "Tespit kalitesi orta seviyededir. Sistem makul güvenilirlikle sonuç üretmiştir."}
-{"task": "report", "prompt": "Güvenilirlik: 0.45, Etkili: 0.37, Spoof: 0.52. Türkçe açıklama yap:", "target": "Tespit güvenilirliği sınırlıdır. Zorlu koşullar ve yüksek belirsizlik seviyesi gözlemlenmiştir."}
-{"task": "report", "prompt": "Güvenilirlik: 0.85, Etkili: 0.80, Spoof: 0.10. Türkçe açıklama yap:", "target": "Sistem yüksek güvenilirlikle hedef tespiti gerçekleştirmiştir. Radar ve termal sinyaller güçlü karakteristik göstermiştir. Tespit kalitesi mükemmel seviyededir."}
-{"task": "report", "prompt": "Güvenilirlik: 0.88, Etkili: 0.83, Spoof: 0.08. Türkçe açıklama yap:", "target": "Tespit sistemi çok güçlü performans sergilemiştir. Radar kesit alanı ve termal imza belirgin şekilde tespit edilmiştir. Güvenilirlik çok yüksek seviyededir."}
-{"task": "one_liner", "prompt": "Güvenilirlik: 0.41, Etkili: 0.41, Spoof: 0.51. Türkçe açıklama yap:", "target": "Sınırlı tespit kalitesi."}
+{"task": "report", "prompt": "0.88 0.83 0.08", "target": "Çok güçlü hedef tespiti gerçekleştirildi."}
+{"task": "report", "prompt": "0.82 0.78 0.12", "target": "İyi seviyede tespit başarısı sağlandı."}
+{"task": "one_liner", "prompt": "0.65 0.58 0.25", "target": "Orta seviye."}
+{"task": "report", "prompt": "0.70 0.63 0.35", "target": "Orta seviye güvenilirlik gösterildi."}
+{"task": "report", "prompt": "0.63 0.57 0.20", "target": "Makul kalitede tespit gerçekleştirildi."}
+{"task": "report", "prompt": "0.80 0.75 0.01", "target": "Yüksek güvenilirlikle tespit edildi."}
+{"task": "one_liner", "prompt": "0.93 0.88 0.18", "target": "Çok güçlü tespit."}

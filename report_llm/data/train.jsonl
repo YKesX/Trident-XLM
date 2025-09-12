@@ -1,44 +1,58 @@
-{"task": "report", "prompt": "Güvenilirlik: 0.55, Etkili: 0.45, Spoof: 0.66. Türkçe açıklama yap:", "target": "Tespit güvenilirliği sınırlıdır. Zorlu koşullar ve yüksek belirsizlik seviyesi gözlemlenmiştir."}
-{"task": "report", "prompt": "Güvenilirlik: 0.69, Etkili: 0.55, Spoof: 0.15. Türkçe açıklama yap:", "target": "Tespit kalitesi orta seviyededir. Sistem makul güvenilirlikle sonuç üretmiştir."}
-{"task": "one_liner", "prompt": "Güvenilirlik: 0.39, Etkili: 0.38, Spoof: 0.68. Türkçe açıklama yap:", "target": "Belirsizlik seviyesi yüksek."}
-{"task": "one_liner", "prompt": "Güvenilirlik: 0.70, Etkili: 0.64, Spoof: 0.22. Türkçe açıklama yap:", "target": "Yeterli güvenilirlik, kabul edilebilir."}
-{"task": "report", "prompt": "Güvenilirlik: 0.65, Etkili: 0.58, Spoof: 0.25. Türkçe açıklama yap:", "target": "Sistem orta seviyede güvenilirlikle tespit gerçekleştirmiştir. Atmosferik koşullar ve gürültü faktörleri etkili olmuştur ancak makul sonuç elde edilmiştir."}
-{"task": "one_liner", "prompt": "Güvenilirlik: 0.38, Etkili: 0.32, Spoof: 0.68. Türkçe açıklama yap:", "target": "Tespit zorluğu, spoof riski yüksek."}
-{"task": "one_liner", "prompt": "Güvenilirlik: 0.78, Etkili: 0.85, Spoof: 0.20. Türkçe açıklama yap:", "target": "Orta seviye güvenilirlik sağlandı."}
-{"task": "report", "prompt": "Güvenilirlik: 0.70, Etkili: 0.64, Spoof: 0.22. Türkçe açıklama yap:", "target": "Hedef tespiti yeterli güvenilirlik seviyesinde tamamlanmıştır. Genel performans kabul edilebilir düzeydedir."}
-{"task": "one_liner", "prompt": "Güvenilirlik: 0.60, Etkili: 0.70, Spoof: 0.17. Türkçe açıklama yap:", "target": "Kabul edilebilir tespit kalitesi."}
-{"task": "report", "prompt": "Güvenilirlik: 0.80, Etkili: 0.81, Spoof: 0.01. Türkçe açıklama yap:", "target": "Tespit kalitesi orta seviyededir. Sistem makul güvenilirlikle sonuç üretmiştir."}
-{"task": "report", "prompt": "Güvenilirlik: 0.83, Etkili: 0.85, Spoof: 0.10. Türkçe açıklama yap:", "target": "Sistem yüksek performans göstermiştir. Tespit kalitesi mükemmel seviyededir ve güvenilirlik çok yüksektir."}
-{"task": "report", "prompt": "Güvenilirlik: 0.57, Etkili: 0.56, Spoof: 0.21. Türkçe açıklama yap:", "target": "Tespit güvenilirliği sınırlıdır. Zorlu koşullar ve yüksek belirsizlik seviyesi gözlemlenmiştir."}
-{"task": "report", "prompt": "Güvenilirlik: 0.60, Etkili: 0.70, Spoof: 0.17. Türkçe açıklama yap:", "target": "Tespit kalitesi orta seviyededir. Sistem makul güvenilirlikle sonuç üretmiştir."}
-{"task": "report", "prompt": "Güvenilirlik: 0.38, Etkili: 0.32, Spoof: 0.68. Türkçe açıklama yap:", "target": "Hedef tespitinde zorluk yaşanmıştır. Yüksek spoof riski tespit edilmiş olup sonuçların dikkatli değerlendirilmesi gerekmektedir."}
-{"task": "report", "prompt": "Güvenilirlik: 0.77, Etkili: 0.66, Spoof: 0.33. Türkçe açıklama yap:", "target": "Tespit kalitesi orta seviyededir. Sistem makul güvenilirlikle sonuç üretmiştir."}
-{"task": "report", "prompt": "Güvenilirlik: 0.88, Etkili: 0.71, Spoof: 0.03. Türkçe açıklama yap:", "target": "Sistem yüksek performans göstermiştir. Tespit kalitesi mükemmel seviyededir ve güvenilirlik çok yüksektir."}
-{"task": "one_liner", "prompt": "Güvenilirlik: 0.69, Etkili: 0.55, Spoof: 0.15. Türkçe açıklama yap:", "target": "Kabul edilebilir tespit kalitesi."}
-{"task": "report", "prompt": "Güvenilirlik: 0.39, Etkili: 0.38, Spoof: 0.68. Türkçe açıklama yap:", "target": "Tespit güvenilirliği sınırlıdır. Zorlu koşullar ve yüksek belirsizlik seviyesi gözlemlenmiştir."}
-{"task": "one_liner", "prompt": "Güvenilirlik: 0.78, Etkili: 0.72, Spoof: 0.17. Türkçe açıklama yap:", "target": "Yeterli güvenilirlik seviyesi."}
-{"task": "report", "prompt": "Güvenilirlik: 0.42, Etkili: 0.26, Spoof: 0.63. Türkçe açıklama yap:", "target": "Tespit güvenilirliği sınırlıdır. Zorlu koşullar ve yüksek belirsizlik seviyesi gözlemlenmiştir."}
-{"task": "one_liner", "prompt": "Güvenilirlik: 0.83, Etkili: 0.85, Spoof: 0.10. Türkçe açıklama yap:", "target": "Mükemmel tespit performansı."}
-{"task": "one_liner", "prompt": "Güvenilirlik: 0.45, Etkili: 0.38, Spoof: 0.55. Türkçe açıklama yap:", "target": "Düşük güvenilirlik, zor koşullar."}
-{"task": "one_liner", "prompt": "Güvenilirlik: 0.57, Etkili: 0.56, Spoof: 0.21. Türkçe açıklama yap:", "target": "Sınırlı tespit kalitesi."}
-{"task": "report", "prompt": "Güvenilirlik: 0.41, Etkili: 0.41, Spoof: 0.51. Türkçe açıklama yap:", "target": "Tespit güvenilirliği sınırlıdır. Zorlu koşullar ve yüksek belirsizlik seviyesi gözlemlenmiştir."}
-{"task": "one_liner", "prompt": "Güvenilirlik: 0.68, Etkili: 0.62, Spoof: 0.30. Türkçe açıklama yap:", "target": "Makul tespit kalitesi, sınırlı veriler."}
-{"task": "one_liner", "prompt": "Güvenilirlik: 0.85, Etkili: 0.80, Spoof: 0.10. Türkçe açıklama yap:", "target": "Yüksek güvenilirlik seviyesinde hedef tespit edildi."}
-{"task": "report", "prompt": "Güvenilirlik: 0.68, Etkili: 0.62, Spoof: 0.30. Türkçe açıklama yap:", "target": "Tespit kalitesi makul seviyededir. Sensor verilerinde kısıtlılıklar bulunmakta ancak sistem güvenilir analiz sağlamıştır."}
-{"task": "one_liner", "prompt": "Güvenilirlik: 0.45, Etkili: 0.37, Spoof: 0.52. Türkçe açıklama yap:", "target": "Belirsizlik seviyesi yüksek."}
-{"task": "one_liner", "prompt": "Güvenilirlik: 0.65, Etkili: 0.58, Spoof: 0.25. Türkçe açıklama yap:", "target": "Orta seviye güvenilirlik, koşullar zor."}
-{"task": "report", "prompt": "Güvenilirlik: 0.64, Etkili: 0.55, Spoof: 0.27. Türkçe açıklama yap:", "target": "Tespit kalitesi orta seviyededir. Sistem makul güvenilirlikle sonuç üretmiştir."}
-{"task": "one_liner", "prompt": "Güvenilirlik: 0.42, Etkili: 0.26, Spoof: 0.63. Türkçe açıklama yap:", "target": "Düşük güvenilirlik, zor koşullar."}
-{"task": "one_liner", "prompt": "Güvenilirlik: 0.70, Etkili: 0.68, Spoof: 0.37. Türkçe açıklama yap:", "target": "Yeterli güvenilirlik seviyesi."}
-{"task": "one_liner", "prompt": "Güvenilirlik: 0.82, Etkili: 0.78, Spoof: 0.12. Türkçe açıklama yap:", "target": "İyi seviyede tespit başarısı kaydedildi."}
-{"task": "one_liner", "prompt": "Güvenilirlik: 0.55, Etkili: 0.45, Spoof: 0.66. Türkçe açıklama yap:", "target": "Sınırlı tespit kalitesi."}
-{"task": "one_liner", "prompt": "Güvenilirlik: 0.77, Etkili: 0.66, Spoof: 0.33. Türkçe açıklama yap:", "target": "Yeterli güvenilirlik seviyesi."}
-{"task": "one_liner", "prompt": "Güvenilirlik: 0.33, Etkili: 0.31, Spoof: 0.61. Türkçe açıklama yap:", "target": "Belirsizlik seviyesi yüksek."}
-{"task": "report", "prompt": "Güvenilirlik: 0.82, Etkili: 0.78, Spoof: 0.12. Türkçe açıklama yap:", "target": "Hedef tespiti iyi seviyede gerçekleştirilmiştir. Sensor verileri tatmin edici kalitede olup sistem güvenilir sonuç üretmiştir."}
-{"task": "one_liner", "prompt": "Güvenilirlik: 0.42, Etkili: 0.35, Spoof: 0.62. Türkçe açıklama yap:", "target": "Zayıf sinyal kalitesi, belirsizlik var."}
-{"task": "report", "prompt": "Güvenilirlik: 0.33, Etkili: 0.31, Spoof: 0.61. Türkçe açıklama yap:", "target": "Tespit güvenilirliği sınırlıdır. Zorlu koşullar ve yüksek belirsizlik seviyesi gözlemlenmiştir."}
-{"task": "one_liner", "prompt": "Güvenilirlik: 0.88, Etkili: 0.71, Spoof: 0.03. Türkçe açıklama yap:", "target": "Yüksek güvenilirlikle tespit edildi."}
-{"task": "report", "prompt": "Güvenilirlik: 0.70, Etkili: 0.68, Spoof: 0.37. Türkçe açıklama yap:", "target": "Tespit kalitesi orta seviyededir. Sistem makul güvenilirlikle sonuç üretmiştir."}
-{"task": "report", "prompt": "Güvenilirlik: 0.45, Etkili: 0.38, Spoof: 0.55. Türkçe açıklama yap:", "target": "Sistem düşük güvenilirlik seviyesinde tespit gerçekleştirmiştir. Zorlu çevre koşulları ve yüksek gürültü seviyesi performansı olumsuz etkilemiştir."}
-{"task": "report", "prompt": "Güvenilirlik: 0.78, Etkili: 0.72, Spoof: 0.17. Türkçe açıklama yap:", "target": "Tespit kalitesi orta seviyededir. Sistem makul güvenilirlikle sonuç üretmiştir."}
-{"task": "one_liner", "prompt": "Güvenilirlik: 0.64, Etkili: 0.55, Spoof: 0.27. Türkçe açıklama yap:", "target": "Kabul edilebilir tespit kalitesi."}
+{"task": "report", "prompt": "0.45 0.38 0.55", "target": "Düşük güvenilirlik seviyesi tespit edildi."}
+{"task": "one_liner", "prompt": "0.77 0.73 0.02", "target": "İyi seviye tespit."}
+{"task": "one_liner", "prompt": "0.70 0.63 0.35", "target": "Orta seviye."}
+{"task": "one_liner", "prompt": "0.75 0.69 0.32", "target": "Yeterli güvenilirlik."}
+{"task": "report", "prompt": "0.90 0.85 0.20", "target": "Yüksek güvenilirlikle tespit edildi."}
+{"task": "one_liner", "prompt": "0.82 0.78 0.12", "target": "İyi seviye tespit."}
+{"task": "report", "prompt": "0.93 0.88 0.18", "target": "Çok güçlü hedef tespiti gerçekleştirildi."}
+{"task": "report", "prompt": "0.68 0.62 0.30", "target": "Makul kalitede tespit gerçekleştirildi."}
+{"task": "one_liner", "prompt": "0.45 0.38 0.55", "target": "Düşük güvenilirlik."}
+{"task": "one_liner", "prompt": "0.85 0.80 0.10", "target": "Yüksek güvenilirlik."}
+{"task": "one_liner", "prompt": "0.68 0.62 0.30", "target": "Makul kalite."}
+{"task": "one_liner", "prompt": "0.65 0.59 0.12", "target": "Yeterli güvenilirlik."}
+{"task": "report", "prompt": "0.65 0.59 0.12", "target": "Yeterli güvenilirlik seviyesi sağlandı."}
+{"task": "one_liner", "prompt": "0.45 0.38 0.55", "target": "Düşük güvenilirlik."}
+{"task": "one_liner", "prompt": "0.82 0.78 0.12", "target": "İyi seviye tespit."}
+{"task": "report", "prompt": "0.42 0.35 0.62", "target": "Zayıf sinyal kalitesi gözlemlendi."}
+{"task": "report", "prompt": "0.65 0.58 0.25", "target": "Orta seviye güvenilirlik gösterildi."}
+{"task": "one_liner", "prompt": "0.42 0.35 0.62", "target": "Zayıf sinyal."}
+{"task": "one_liner", "prompt": "0.38 0.32 0.68", "target": "Belirsizlik yüksek."}
+{"task": "one_liner", "prompt": "0.47 0.40 0.72", "target": "Zayıf sinyal."}
+{"task": "report", "prompt": "0.45 0.38 0.55", "target": "Düşük güvenilirlik seviyesi tespit edildi."}
+{"task": "one_liner", "prompt": "0.43 0.37 0.78", "target": "Belirsizlik yüksek."}
+{"task": "report", "prompt": "0.73 0.67 0.40", "target": "Makul kalitede tespit gerçekleştirildi."}
+{"task": "report", "prompt": "0.75 0.69 0.32", "target": "Yeterli güvenilirlik seviyesi sağlandı."}
+{"task": "report", "prompt": "0.87 0.83 0.22", "target": "İyi seviyede tespit başarısı sağlandı."}
+{"task": "report", "prompt": "0.50 0.43 0.65", "target": "Düşük güvenilirlik seviyesi tespit edildi."}
+{"task": "report", "prompt": "0.65 0.58 0.25", "target": "Orta seviye güvenilirlik gösterildi."}
+{"task": "one_liner", "prompt": "0.88 0.83 0.08", "target": "Çok güçlü tespit."}
+{"task": "report", "prompt": "0.77 0.73 0.02", "target": "İyi seviyede tespit başarısı sağlandı."}
+{"task": "one_liner", "prompt": "0.38 0.32 0.68", "target": "Belirsizlik yüksek."}
+{"task": "report", "prompt": "0.40 0.33 0.45", "target": "Düşük güvenilirlik seviyesi tespit edildi."}
+{"task": "one_liner", "prompt": "0.87 0.83 0.22", "target": "İyi seviye tespit."}
+{"task": "report", "prompt": "0.47 0.40 0.72", "target": "Zayıf sinyal kalitesi gözlemlendi."}
+{"task": "one_liner", "prompt": "0.65 0.58 0.25", "target": "Orta seviye."}
+{"task": "one_liner", "prompt": "0.42 0.35 0.62", "target": "Zayıf sinyal."}
+{"task": "one_liner", "prompt": "0.90 0.85 0.20", "target": "Yüksek güvenilirlik."}
+{"task": "one_liner", "prompt": "0.70 0.64 0.22", "target": "Yeterli güvenilirlik."}
+{"task": "report", "prompt": "0.37 0.30 0.52", "target": "Zayıf sinyal kalitesi gözlemlendi."}
+{"task": "report", "prompt": "0.88 0.83 0.08", "target": "Çok güçlü hedef tespiti gerçekleştirildi."}
+{"task": "one_liner", "prompt": "0.40 0.33 0.45", "target": "Düşük güvenilirlik."}
+{"task": "report", "prompt": "0.82 0.78 0.12", "target": "İyi seviyede tespit başarısı sağlandı."}
+{"task": "report", "prompt": "0.60 0.53 0.15", "target": "Orta seviye güvenilirlik gösterildi."}
+{"task": "one_liner", "prompt": "0.83 0.78 0.01", "target": "Çok güçlü tespit."}
+{"task": "one_liner", "prompt": "0.85 0.80 0.10", "target": "Yüksek güvenilirlik."}
+{"task": "one_liner", "prompt": "0.33 0.27 0.58", "target": "Belirsizlik yüksek."}
+{"task": "report", "prompt": "0.68 0.62 0.30", "target": "Makul kalitede tespit gerçekleştirildi."}
+{"task": "report", "prompt": "0.33 0.27 0.58", "target": "Belirsizlik seviyesi yüksek bulundu."}
+{"task": "one_liner", "prompt": "0.37 0.30 0.52", "target": "Zayıf sinyal."}
+{"task": "one_liner", "prompt": "0.60 0.53 0.15", "target": "Orta seviye."}
+{"task": "one_liner", "prompt": "0.63 0.57 0.20", "target": "Makul kalite."}
+{"task": "one_liner", "prompt": "0.70 0.64 0.22", "target": "Yeterli güvenilirlik."}
+{"task": "report", "prompt": "0.70 0.64 0.22", "target": "Yeterli güvenilirlik seviyesi sağlandı."}
+{"task": "report", "prompt": "0.70 0.64 0.22", "target": "Yeterli güvenilirlik seviyesi sağlandı."}
+{"task": "one_liner", "prompt": "0.88 0.83 0.08", "target": "Çok güçlü tespit."}
+{"task": "report", "prompt": "0.38 0.32 0.68", "target": "Belirsizlik seviyesi yüksek bulundu."}
+{"task": "report", "prompt": "0.42 0.35 0.62", "target": "Zayıf sinyal kalitesi gözlemlendi."}
+{"task": "one_liner", "prompt": "0.73 0.67 0.40", "target": "Makul kalite."}
+{"task": "one_liner", "prompt": "0.68 0.62 0.30", "target": "Makul kalite."}
