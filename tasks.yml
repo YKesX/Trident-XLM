@@ -1,0 +1,55 @@
+tasks:
+  - name: Generate Training Data
+    instructions: |
+      # Run the dataset builder on available telemetry to produce JSONL train/val/test sets.
+      python3 report_llm/build_dataset.py --telemetry path/to/telemetry.jsonl --out_dir data/
+      # Verify that `data/train.jsonl`, `data/val.jsonl`, and `data/test.jsonl` were created.
+  - name: Train One-Liner Model
+    instructions: |
+      # Fine-tune the one-liner LLM using `train_flan_one_liner.py`.
+      python3 report_llm/train_flan_one_liner.py \
+        --train data/train.jsonl \
+        --val   data/val.jsonl \
+        --out   models/oneliner_model
+      # Check that `models/oneliner_model` contains the trained model and tokenizer.
+  - name: Train Report Model
+    instructions: |
+      # Fine-tune the report LLM using `train_mt5_report.py`.
+      python3 report_llm/train_mt5_report.py \
+        --train data/train.jsonl \
+        --val   data/val.jsonl \
+        --out   models/report_model
+      # Confirm that `models/report_model` has the saved Lora weights and tokenizer.
+  - name: Quantize Models for Deployment
+    instructions: |
+      # Apply dynamic INT8 quantization to reduce size of each model.
+      python3 report_llm/quantize.py --model_in models/oneliner_model --model_out models/oneliner_model_q8
+      python3 report_llm/quantize.py --model_in models/report_model   --model_out models/report_model_q8
+      # These quantized models can be loaded quickly by the CPU.
+  - name: Integrate LLM into TRIDENT-Net
+    instructions: |
+      # Modify `trident/xai_text/small_llm_reporter.py`:
+      # - In `_generate_report_sync`, load the quantized LLM(s) (e.g. via `summarizer_sync.load_model` or `AutoModel`).
+      # - Convert the inference output (probabilities, events, attention, spoof risk, etc.) into a prompt using `report_llm.prompt_builder`.
+      # - Call the model’s `generate()` (similar to `summarizer_sync.make_one_liner`) to produce the text.
+      # - Apply the ban filter (as in `summarizer_sync._guard_non_operational`) and optionally style scoring.
+      # Replace the stub template text with this generated report.
+  - name: Enable LLM Reporter in Pipeline
+    instructions: |
+      # In `TRIDENT-Net/tasks.yml`, under `xai_text`:
+      # - Set `SmallLLMReporter`’s `enabled: true`.
+      # - Add a new output field for the full-text report (e.g. `report`).
+      # - Fix the `Templater` config: remove the unused `template:` field since `Templater` doesn't accept it.
+      # Update the `infer_realtime` pipeline so that it triggers the reporter (e.g. after fusion/guard steps) and returns the new `report`.
+  - name: Integrate Style Guard
+    instructions: |
+      # Use `StyleGuard` to enforce writing style and banned words:
+      # - Instantiate `StyleGuard` (e.g. with suitable anchor/banned examples).
+      # - After generating text, call `guard.passes(candidate, anchors, banned)`; if false, regenerate or modify the output.
+      # - Ensure no forbidden terms (like “ateş et”) appear in the report:contentReference[oaicite:10]{index=10}.
+  - name: Testing and Cleanup
+    instructions: |
+      # Write unit tests for the report generation (e.g. using synthetic inputs).
+      # Test that banned words are flagged and that output follows the requested style preset.
+      # Remove any dead code or unused scripts. Add a README to Trident-XLM describing usage.
+      # Ensure all code is formatted consistently (e.g. run `black` or `flake8`) and license/header is included.
