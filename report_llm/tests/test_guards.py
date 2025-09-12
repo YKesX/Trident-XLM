@@ -1,5 +1,6 @@
-import pytest, re
-from ..summarizer_sync import _guard_no_angle_brackets, _guard_non_operational
+import pytest, re, sys, os
+sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..'))
+from report_llm.summarizer_sync import _guard_no_angle_brackets, _guard_non_operational
 
 def test_angle_guard():
     with pytest.raises(ValueError):
