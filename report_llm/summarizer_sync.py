@@ -21,7 +21,8 @@ def _guard_no_angle_brackets(text: str):
 def make_one_liner(model_dir: str, inputs_text: str) -> str:
     tok, mdl = load_model(model_dir)
     x = tok(inputs_text, return_tensors="pt", truncation=True, max_length=192)
-    out = mdl.generate(**x, max_new_tokens=32, temperature=0.0, no_repeat_ngram_size=3)
+    out = mdl.generate(**x, max_new_tokens=32, do_sample=False, no_repeat_ngram_size=3)
+    # For seq2seq, the output doesn't include the input, so decode from token 0
     s = tok.decode(out[0], skip_special_tokens=True).strip()
     _guard_non_operational(s); _guard_no_angle_brackets(s)
     return s

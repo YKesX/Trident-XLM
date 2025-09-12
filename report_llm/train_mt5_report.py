@@ -16,8 +16,13 @@ def load_jsonl(path, task_filter):
 
 def tokenize_fn(tok, max_in, max_out):
     def fn(batch):
-        x = tok(batch["prompt"], truncation=True, max_length=max_in)
-        y = tok(batch["target"], truncation=True, max_length=max_out)
+        # Tokenize input
+        x = tok(batch["prompt"], truncation=True, max_length=max_in, padding=True, return_tensors=None)
+        
+        # Tokenize target
+        with tok.as_target_tokenizer():
+            y = tok(batch["target"], truncation=True, max_length=max_out, padding=True, return_tensors=None)
+        
         x["labels"] = y["input_ids"]
         return x
     return fn
@@ -43,11 +48,16 @@ def main(args):
 
     args_tr = TrainingArguments(
         output_dir=args.out,
-        learning_rate=3e-4, weight_decay=0.01,
-        per_device_train_batch_size=32, per_device_eval_batch_size=32,
-        num_train_epochs=5, evaluation_strategy="epoch", save_strategy="epoch",
-        logging_steps=50, predict_with_generate=True, bf16=False,
-        generation_num_beams=3, generation_max_length=192
+        learning_rate=3e-4, 
+        weight_decay=0.01,
+        per_device_train_batch_size=16, 
+        per_device_eval_batch_size=16,
+        num_train_epochs=3, 
+        eval_strategy="epoch", 
+        save_strategy="epoch",
+        logging_steps=50,
+        fp16=False,
+        remove_unused_columns=False
     )
     collator = DataCollatorForSeq2Seq(tok, model=model)
     trainer = Trainer(model=model, args=args_tr, data_collator=collator, train_dataset=train, eval_dataset=val)

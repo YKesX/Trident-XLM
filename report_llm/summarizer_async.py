@@ -28,11 +28,11 @@ def make_report(model_dir: str, inputs_text: str, max_length: int = 192) -> str:
         **x, 
         max_new_tokens=max_length, 
         num_beams=3,
-        temperature=0.7,
-        no_repeat_ngram_size=3,
         do_sample=False,
+        no_repeat_ngram_size=3,
         early_stopping=True
     )
+    # For seq2seq, decode the generated tokens
     s = tok.decode(out[0], skip_special_tokens=True).strip()
     _guard_non_operational(s)
     _guard_no_angle_brackets(s)
