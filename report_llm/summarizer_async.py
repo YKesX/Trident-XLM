@@ -1,0 +1,44 @@
+from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
+import re
+import asyncio
+from typing import Optional
+
+# Load a trained/quantized model directory or a base
+def load_model(model_dir: str):
+    tok = AutoTokenizer.from_pretrained(model_dir)
+    mdl = AutoModelForSeq2SeqLM.from_pretrained(model_dir)
+    return tok, mdl
+
+_BANNED = re.compile(r"\b(ateş|ateşle|nişan|vur|angaje ol|hedefe ateş)\b", re.I)
+_ANGLE  = re.compile(r"<[^>]+>")
+
+def _guard_non_operational(text: str):
+    if _BANNED.search(text):
+        raise ValueError("Operational wording detected; reject.")
+
+def _guard_no_angle_brackets(text: str):
+    if _ANGLE.search(text):
+        raise ValueError("Model must not output <angle> tokens; reject.")
+
+def make_report(model_dir: str, inputs_text: str, max_length: int = 192) -> str:
+    """Generate a longer report text using beam search for better quality."""
+    tok, mdl = load_model(model_dir)
+    x = tok(inputs_text, return_tensors="pt", truncation=True, max_length=192)
+    out = mdl.generate(
+        **x, 
+        max_new_tokens=max_length, 
+        num_beams=3,
+        temperature=0.7,
+        no_repeat_ngram_size=3,
+        do_sample=False,
+        early_stopping=True
+    )
+    s = tok.decode(out[0], skip_special_tokens=True).strip()
+    _guard_non_operational(s)
+    _guard_no_angle_brackets(s)
+    return s
+
+async def make_report_async(model_dir: str, inputs_text: str, max_length: int = 192) -> str:
+    """Asynchronous version of report generation for non-blocking operation."""
+    loop = asyncio.get_event_loop()
+    return await loop.run_in_executor(None, make_report, model_dir, inputs_text, max_length)
