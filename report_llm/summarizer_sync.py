@@ -22,7 +22,14 @@ def make_one_liner(model_dir: str, inputs_text: str) -> str:
     tok, mdl = load_model(model_dir)
     x = tok(inputs_text, return_tensors="pt", truncation=True, max_length=192)
     out = mdl.generate(**x, max_new_tokens=32, do_sample=False, no_repeat_ngram_size=3)
-    # For seq2seq, the output doesn't include the input, so decode from token 0
-    s = tok.decode(out[0], skip_special_tokens=True).strip()
+    # For seq2seq, decode only the new tokens
+    input_length = x['input_ids'].shape[1] if hasattr(x['input_ids'], 'shape') else len(x['input_ids'][0])
+    generated_tokens = out[0][input_length:] if out[0].shape[0] > input_length else out[0]
+    s = tok.decode(generated_tokens, skip_special_tokens=True).strip()
+    # Fallback if empty or bad output
+    if not s or len(s) < 5:
+        s = tok.decode(out[0], skip_special_tokens=True).strip()
+    # Clean up any remaining issues
+    s = s.replace('<pad>', '').replace('<unk>', '').strip()
     _guard_non_operational(s); _guard_no_angle_brackets(s)
     return s

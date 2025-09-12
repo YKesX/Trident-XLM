@@ -23,7 +23,7 @@ def _guard_no_angle_brackets(text: str):
 def make_report(model_dir: str, inputs_text: str, max_length: int = 192) -> str:
     """Generate a longer report text using beam search for better quality."""
     tok, mdl = load_model(model_dir)
-    x = tok(inputs_text, return_tensors="pt", truncation=True, max_length=192)
+    x = tok(inputs_text, return_tensors="pt", truncation=True, max_length=512)
     out = mdl.generate(
         **x, 
         max_new_tokens=max_length, 
@@ -32,8 +32,15 @@ def make_report(model_dir: str, inputs_text: str, max_length: int = 192) -> str:
         no_repeat_ngram_size=3,
         early_stopping=True
     )
-    # For seq2seq, decode the generated tokens
-    s = tok.decode(out[0], skip_special_tokens=True).strip()
+    # For seq2seq, decode only the new tokens
+    input_length = x['input_ids'].shape[1] if hasattr(x['input_ids'], 'shape') else len(x['input_ids'][0])
+    generated_tokens = out[0][input_length:] if out[0].shape[0] > input_length else out[0]
+    s = tok.decode(generated_tokens, skip_special_tokens=True).strip()
+    # Fallback if empty or bad output
+    if not s or len(s) < 10:
+        s = tok.decode(out[0], skip_special_tokens=True).strip()
+    # Clean up any remaining issues
+    s = s.replace('<pad>', '').replace('<unk>', '').replace('<extra_id_0>', '').replace('<extra_id_1>', '').strip()
     _guard_non_operational(s)
     _guard_no_angle_brackets(s)
     return s

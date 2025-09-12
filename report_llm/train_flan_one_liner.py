@@ -50,14 +50,16 @@ def main(args):
         output_dir=args.out,
         learning_rate=3e-4, 
         weight_decay=0.01,
-        per_device_train_batch_size=32, 
-        per_device_eval_batch_size=32,
-        num_train_epochs=3, 
+        per_device_train_batch_size=8, 
+        per_device_eval_batch_size=8,
+        num_train_epochs=5, 
         eval_strategy="epoch", 
         save_strategy="epoch",
         logging_steps=50,
         fp16=False,
-        remove_unused_columns=False
+        remove_unused_columns=False,
+        warmup_steps=10,
+        save_total_limit=1
     )
     collator = DataCollatorForSeq2Seq(tok, model=model)
     trainer = Trainer(model=model, args=args_tr, data_collator=collator, train_dataset=train, eval_dataset=val)
