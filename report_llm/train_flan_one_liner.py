@@ -48,18 +48,21 @@ def main(args):
 
     args_tr = TrainingArguments(
         output_dir=args.out,
-        learning_rate=3e-4, 
+        learning_rate=1e-4,  # Lower learning rate for stability
         weight_decay=0.01,
-        per_device_train_batch_size=8, 
-        per_device_eval_batch_size=8,
-        num_train_epochs=5, 
+        per_device_train_batch_size=2,  # Smaller batch size for small dataset
+        per_device_eval_batch_size=2,
+        num_train_epochs=20,  # More epochs for better learning 
         eval_strategy="epoch", 
         save_strategy="epoch",
-        logging_steps=50,
+        logging_steps=5,  # More frequent logging
         fp16=False,
         remove_unused_columns=False,
-        warmup_steps=10,
-        save_total_limit=1
+        warmup_steps=5,
+        save_total_limit=1,
+        load_best_model_at_end=True,
+        metric_for_best_model="eval_loss",
+        greater_is_better=False
     )
     collator = DataCollatorForSeq2Seq(tok, model=model)
     trainer = Trainer(model=model, args=args_tr, data_collator=collator, train_dataset=train, eval_dataset=val)

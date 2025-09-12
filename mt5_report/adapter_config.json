@@ -25,13 +25,13 @@
   "rank_pattern": {},
   "revision": null,
   "target_modules": [
-    "v",
-    "q",
+    "wi_0",
     "wi_1",
     "o",
-    "k",
     "wo",
-    "wi_0"
+    "k",
+    "q",
+    "v"
   ],
   "target_parameters": null,
   "task_type": "SEQ_2_SEQ_LM",

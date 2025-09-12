@@ -28,7 +28,7 @@ def tokenize_fn(tok, max_in, max_out):
     return fn
 
 def main(args):
-    tok = AutoTokenizer.from_pretrained(args.base)
+    tok = AutoTokenizer.from_pretrained(args.base, use_fast=False)  # Use slow tokenizer to avoid conversion issues
     model = AutoModelForSeq2SeqLM.from_pretrained(args.base)
 
     # LoRA config
@@ -48,17 +48,17 @@ def main(args):
 
     args_tr = TrainingArguments(
         output_dir=args.out,
-        learning_rate=3e-4, 
+        learning_rate=1e-4,  # Lower learning rate for stability
         weight_decay=0.01,
-        per_device_train_batch_size=4, 
-        per_device_eval_batch_size=4,
-        num_train_epochs=5, 
+        per_device_train_batch_size=2,  # Smaller batch size for small dataset
+        per_device_eval_batch_size=2,
+        num_train_epochs=20,  # More epochs for better learning
         eval_strategy="epoch", 
         save_strategy="epoch",
-        logging_steps=50,
+        logging_steps=5,  # More frequent logging
         fp16=False,
         remove_unused_columns=False,
-        warmup_steps=10,
+        warmup_steps=5,
         save_total_limit=1
     )
     collator = DataCollatorForSeq2Seq(tok, model=model)
