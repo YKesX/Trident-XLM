@@ -28,7 +28,7 @@ def tokenize_fn(tok, max_in, max_out):
     return fn
 
 def main(args):
-    tok = AutoTokenizer.from_pretrained(args.base, use_fast=False)  # Use slow tokenizer to avoid conversion issues
+    tok = AutoTokenizer.from_pretrained(args.base)  # Use default tokenizer settings
     model = AutoModelForSeq2SeqLM.from_pretrained(args.base)
 
     # LoRA config - optimized for Turkish multilingual learning
