@@ -50,9 +50,9 @@ def main(args):
         output_dir=args.out,
         learning_rate=3e-4,  # Higher learning rate for faster convergence
         weight_decay=0.01,
-        per_device_train_batch_size=4,  # Larger batch size for efficiency
-        per_device_eval_batch_size=4,
-        num_train_epochs=10,  # Fewer epochs for faster training
+        per_device_train_batch_size=1,  # Single example to avoid memory issues
+        per_device_eval_batch_size=1,
+        num_train_epochs=3,  # Just 3 epochs for quick validation
         eval_strategy="epoch", 
         save_strategy="epoch",
         logging_steps=25,
