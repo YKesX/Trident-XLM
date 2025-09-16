@@ -99,6 +99,16 @@ one_liner = make_one_liner("path/to/flan_model", prompt)
 report = make_report("path/to/mt5_model", prompt)
 ```
 
+### 5. Randomized Demo (no dataset needed)
+
+Quickly see Turkish outputs with synthetic telemetry:
+
+```powershell
+python .\random_demo.py
+```
+
+It will print a prompt, generate a one-liner and a report. If trained model folders (e.g., `flan_quick_int8`) are not present, it falls back to base HF models or a tiny Turkish template to ensure visible output.
+
 ## 📋 Data Format
 
 ### Input: TelemetryNLIn

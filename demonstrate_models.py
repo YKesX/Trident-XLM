@@ -3,7 +3,7 @@
 Demonstrate that both models are working and producing Turkish outputs.
 """
 
-import json
+import json, os
 from report_llm.summarizer_sync import make_one_liner
 from report_llm.summarizer_async import make_report
 from report_llm.prompt_builder import build_inputs_for_llm
@@ -44,10 +44,14 @@ def demo_working_models():
     prompt = build_inputs_for_llm(telemetry, style="resmi")
     print(f"📝 Input Prompt (first 200 chars):\n{prompt[:200]}...\n")
     
+    # Resolve model paths with fallbacks
+    flan_path = "flan_quick_int8" if os.path.exists("flan_quick_int8") else "google/flan-t5-small"
+    mt5_path  = "flan_quick_int8" if os.path.exists("flan_quick_int8") else "google/mt5-small"
+
     # Test one-liner model (Flan-T5)
     print("🔄 Testing One-liner Model (Flan-T5)...")
     try:
-        one_liner = make_one_liner("flan_one_liner_int8", prompt)
+        one_liner = make_one_liner(flan_path, prompt)
         print(f"✅ ONE-LINER OUTPUT: {one_liner}")
         print(f"   Length: {len(one_liner)} characters")
         print(f"   Turkish words detected: {', '.join([w for w in one_liner.split() if any(c in 'çğıöşüÇĞIÖŞÜ' for c in w)])}")
@@ -59,7 +63,7 @@ def demo_working_models():
     # Test report model (mT5) with better parameters
     print("🔄 Testing Report Model (mT5)...")
     try:
-        report = make_report("mt5_report_int8", prompt, max_length=128)
+        report = make_report(mt5_path, prompt, max_length=128)
         print(f"✅ REPORT OUTPUT: {report}")
         print(f"   Length: {len(report)} characters")
         if len(report) > 1:

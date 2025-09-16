@@ -1,13 +1,39 @@
-from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
-import re
+import os, re
 import asyncio
 from typing import Optional
 
 # Load a trained/quantized model directory or a base
 def load_model(model_dir: str):
-    tok = AutoTokenizer.from_pretrained(model_dir)
-    mdl = AutoModelForSeq2SeqLM.from_pretrained(model_dir)
-    return tok, mdl
+    from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
+    try:
+        tok = AutoTokenizer.from_pretrained(model_dir)
+        mdl = AutoModelForSeq2SeqLM.from_pretrained(model_dir)
+        return tok, mdl
+    except Exception:
+        adapter_files = [
+            os.path.join(model_dir, "adapter_config.json"),
+            os.path.join(model_dir, "adapter_model.safetensors"),
+        ]
+        if any(os.path.exists(p) for p in adapter_files):
+            from peft import PeftModel
+            base_candidates = [
+                os.environ.get("BASE_MODEL", ""),
+                "google/mt5-small",
+                "google/flan-t5-small",
+            ]
+            last_err = None
+            for base in base_candidates:
+                if not base:
+                    continue
+                try:
+                    base_tok = AutoTokenizer.from_pretrained(model_dir if os.path.exists(os.path.join(model_dir, "tokenizer.json")) else base)
+                    base_mdl = AutoModelForSeq2SeqLM.from_pretrained(base)
+                    mdl = PeftModel.from_pretrained(base_mdl, model_dir)
+                    return base_tok, mdl
+                except Exception as e:
+                    last_err = e
+            raise last_err or ValueError("Failed to load adapter with any base model candidate.")
+        raise
 
 _BANNED = re.compile(r"\b(ateş|ateşle|nişan|vur|angaje ol|hedefe ateş)\b", re.I)
 _ANGLE  = re.compile(r"<[^>]+>")

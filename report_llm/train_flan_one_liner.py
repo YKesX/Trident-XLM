@@ -1,10 +1,26 @@
 #!/usr/bin/env python
-import argparse, json
+import argparse, json, os, sys, types, importlib.machinery
 from datasets import Dataset
+# Harden environment to torch-only to avoid TF/NumPy issues
+os.environ.setdefault("TRANSFORMERS_NO_TF", "1")
+os.environ.setdefault("TRANSFORMERS_NO_FLAX", "1")
+os.environ.setdefault("USE_TORCH", "1")
+if "tensorflow" not in sys.modules:
+    _tf = types.ModuleType("tensorflow")
+    _tf.__spec__ = importlib.machinery.ModuleSpec("tensorflow", loader=None)
+    # Minimal Tensor placeholder to satisfy datasets type checks
+    class _DummyTensor: 
+        pass
+    _tf.Tensor = _DummyTensor
+    sys.modules["tensorflow"] = _tf
+if "ml_dtypes" not in sys.modules:
+    _mld = types.ModuleType("ml_dtypes")
+    _mld.__spec__ = importlib.machinery.ModuleSpec("ml_dtypes", loader=None)
+    sys.modules["ml_dtypes"] = _mld
 from transformers import AutoTokenizer, AutoModelForSeq2SeqLM, Trainer, TrainingArguments, DataCollatorForSeq2Seq
 from peft import LoraConfig, get_peft_model
 
-def load_jsonl(path, task_filter):
+def load_jsonl(path, task_filter, limit: int | None = None):
     rows = []
     with open(path, "r", encoding="utf-8") as f:
         for line in f:
@@ -12,6 +28,8 @@ def load_jsonl(path, task_filter):
             r = json.loads(line)
             if r.get("task") == task_filter:
                 rows.append(r)
+            if limit is not None and len(rows) >= limit:
+                break
     return Dataset.from_list(rows)
 
 def tokenize_fn(tok, max_in, max_out):
@@ -39,8 +57,8 @@ def main(args):
     )
     model = get_peft_model(model, lora)
 
-    train = load_jsonl(args.train, "one_liner")
-    val   = load_jsonl(args.val,   "one_liner")
+    train = load_jsonl(args.train, "one_liner", limit=(int(args.limit_train) if args.limit_train else None))
+    val   = load_jsonl(args.val,   "one_liner", limit=(int(args.limit_val) if args.limit_val else None))
 
     tf = tokenize_fn(tok, max_in=512, max_out=128)  # Longer inputs for rich prompts
     train = train.map(tf, batched=True, remove_columns=train.column_names)
@@ -52,10 +70,12 @@ def main(args):
         weight_decay=0.01,
         per_device_train_batch_size=2,  # Larger batch for stability
         per_device_eval_batch_size=2,
-        num_train_epochs=8,  # More epochs for better learning
+        num_train_epochs=float(args.epochs),  # configurable
+        max_steps=int(args.max_steps) if args.max_steps else -1,
         eval_strategy="epoch", 
         save_strategy="epoch",
         logging_steps=50,
+        report_to=["none"],  # avoid tensorboard/tf deps
         fp16=False,
         remove_unused_columns=False,
         warmup_steps=100,  # More warmup for stability
@@ -81,4 +101,8 @@ if __name__ == "__main__":
     p.add_argument("--train", required=True)
     p.add_argument("--val", required=True)
     p.add_argument("--out", required=True)
+    p.add_argument("--epochs", default="8")
+    p.add_argument("--max-steps", dest="max_steps", default="0")
+    p.add_argument("--limit-train", dest="limit_train", default="0")
+    p.add_argument("--limit-val", dest="limit_val", default="0")
     main(p.parse_args())

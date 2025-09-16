@@ -5,11 +5,17 @@ from .types import TelemetryNLIn, Contribution
 from .prompt_builder import build_inputs_for_llm
 
 def load_telemetry(path: str):
+    """Load telemetry JSONL fully, then yield records.
+    This ensures the file handle is closed before iteration (Windows-safe delete).
+    """
+    rows = []
     with open(path, "r", encoding="utf-8") as f:
         for line in f:
-            if not line.strip(): 
+            if not line.strip():
                 continue
-            yield json.loads(line)
+            rows.append(json.loads(line))
+    for r in rows:
+        yield r
 
 def to_struct(obj: dict) -> TelemetryNLIn:
     contribs = [Contribution(**c) for c in obj.get("contributions", [])]
