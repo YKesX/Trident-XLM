@@ -94,6 +94,7 @@ class TridentGUI(tk.Tk):
         super().__init__()
         self.title("Trident-XLM GUI")
         self.geometry("900x700")
+        self._apply_dark_theme()
         self._build()
 
     def _build(self):
@@ -136,6 +137,16 @@ class TridentGUI(tk.Tk):
         self.rep_text = tk.Text(out, height=10, wrap=tk.WORD)
         ttk.Label(out, textvariable=self.one_var, justify=tk.LEFT).pack(fill=tk.X, padx=4, pady=4)
         self.rep_text.pack(fill=tk.BOTH, expand=True, padx=4, pady=4)
+
+        # Apply dark styling to text widgets (after creation)
+        try:
+            entrybg = '#2a2d2e'; fg = '#e5e5e5'; selbg = '#264f78'; bg = '#1e1e1e'
+            for widget in (self.text, self.rep_text):
+                widget.configure(bg=entrybg, fg=fg, insertbackground=fg,
+                                 selectbackground=selbg, selectforeground=fg,
+                                 highlightbackground=bg, highlightcolor=bg)
+        except Exception:
+            pass
 
     def _browse(self, var: tk.StringVar):
         p = filedialog.askdirectory()
@@ -214,6 +225,41 @@ class TridentGUI(tk.Tk):
 
         except Exception as e:
             messagebox.showerror("Hata", str(e))
+
+    def _apply_dark_theme(self):
+        try:
+            style = ttk.Style()
+            # Use a theme that allows custom colors
+            try:
+                style.theme_use('clam')
+            except Exception:
+                pass
+            bg = '#1e1e1e'
+            fg = '#e5e5e5'
+            btn_bg = '#2d2d2d'
+            entry_bg = '#2a2d2e'
+            accent = '#0e639c'
+
+            self.configure(bg=bg)
+            # Base
+            style.configure('.', background=bg, foreground=fg)
+            # Frames and labels
+            style.configure('TFrame', background=bg)
+            style.configure('TLabelframe', background=bg)
+            style.configure('TLabelframe.Label', background=bg, foreground=fg)
+            style.configure('TLabel', background=bg, foreground=fg)
+            # Buttons
+            style.configure('TButton', background=btn_bg, foreground=fg, focuscolor=accent)
+            style.map('TButton', background=[('active', '#3a3a3a')])
+            # Entry/Combobox fields
+            style.configure('TEntry', fieldbackground=entry_bg, foreground=fg)
+            style.configure('TCombobox', fieldbackground=entry_bg, foreground=fg, background=entry_bg)
+            style.map('TCombobox', fieldbackground=[('readonly', entry_bg)],
+                      foreground=[('readonly', fg)],
+                      background=[('active', entry_bg)])
+        except Exception:
+            # Fallback: ignore styling errors
+            pass
 
 if __name__ == "__main__":
     app = TridentGUI()
