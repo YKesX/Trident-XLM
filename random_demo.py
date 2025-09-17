@@ -117,14 +117,22 @@ def fallback_report(t: TelemetryNLIn) -> str:
     ]
     return "\n".join(s)
 
+def _poor(txt: str) -> bool:
+    if not txt:
+        return True
+    t = txt.strip()
+    return (len(t) < 40) or (t.count(" ") < 5)
+
 def main():
     random.seed(7)
     telem = rand_telem()
     prompt = build_inputs_for_llm(telem, style="resmi")
 
-    # Try local paths first, then HF bases
-    flan_path = os.environ.get("FLAN_MODEL", "flan_quick_int8")
-    mt5_path = os.environ.get("MT5_MODEL", "flan_quick_int8")
+    # Try exports if present; else fall back to env or quick folders
+    flan_default = "report_llm/exports/flan_one_liner" if os.path.exists("report_llm/exports/flan_one_liner") else "flan_quick_int8"
+    mt5_default = "report_llm/exports/mt5_report" if os.path.exists("report_llm/exports/mt5_report") else "flan_quick_int8"
+    flan_path = os.environ.get("FLAN_MODEL", flan_default)
+    mt5_path = os.environ.get("MT5_MODEL", mt5_default)
 
     make_one_liner, make_report = try_models()
 
@@ -139,7 +147,7 @@ def main():
             one = make_one_liner(flan_path, prompt)
         except Exception as e:
             print(f"⚠️  One-liner modeli kullanılamadı: {e}")
-    if not one:
+    if (not one) or _poor(one):
         one = fallback_one_liner(telem)
     print("ONE-LINER:\n" + one + "\n")
 
@@ -150,7 +158,7 @@ def main():
             rep = make_report(mt5_path, prompt, max_length=160)
         except Exception as e:
             print(f"⚠️  Rapor modeli kullanılamadı: {e}")
-    if not rep:
+    if (not rep) or _poor(rep):
         rep = fallback_report(telem)
     print("RAPOR:\n" + rep)
 

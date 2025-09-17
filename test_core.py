@@ -52,8 +52,13 @@ def main():
     print("=" * 50)
     
     if not os.path.exists(args.telemetry):
-        print(f"❌ Telemetry file not found: {args.telemetry}")
-        return 1
+        # Fallback to repository root dataset if available
+        root_jsonl = os.path.join(os.path.dirname(__file__), 'trident_report_llm_silver.jsonl')
+        if os.path.exists(root_jsonl):
+            args.telemetry = root_jsonl
+        else:
+            print(f"❌ Telemetry file not found: {args.telemetry}")
+            return 1
         
     telem, targets = load_sample_telemetry(args.telemetry)
     if not telem:

@@ -30,8 +30,14 @@ Telemetry Data → Prompt Builder → LLM Models → Guards → Turkish Text
 git clone https://github.com/YKesX/Trident-XLM.git
 cd Trident-XLM
 
-# Install dependencies
+# Install dependencies (Torch-only recommended)
 pip install -r requirements.txt
+
+# If you hit TensorFlow/NumPy ABI issues on Windows, force torch-only paths:
+# (CLI and scripts do this automatically)
+# set TRANSFORMERS_NO_TF=1
+# set TRANSFORMERS_NO_FLAX=1
+# set USE_TORCH=1
 
 # Test installation
 python cli.py test
@@ -69,7 +75,7 @@ python -m report_llm.train_mt5_report \
 ### 3. Quantize for CPU
 
 ```bash
-# INT8 quantization for edge deployment
+# CPU-safe export (no GPU/bitsandbytes required)
 python -m report_llm.quantize \
   --model_in report_llm/exports/flan_one_liner \
   --model_out report_llm/exports/flan_one_liner_int8
@@ -86,7 +92,8 @@ python -m report_llm.quantize \
 python cli.py inference \
   --telemetry report_llm/data/telemetry.jsonl \
   --model-sync report_llm/exports/flan_one_liner_int8 \
-  --model-async report_llm/exports/mt5_report_int8
+  --model-async report_llm/exports/mt5_report_int8 \
+  --output outputs/trained_inference.json
 
 # Using Python API
 from report_llm import make_one_liner, make_report, build_inputs_for_llm
@@ -107,7 +114,7 @@ Quickly see Turkish outputs with synthetic telemetry:
 python .\random_demo.py
 ```
 
-It will print a prompt, generate a one-liner and a report. If trained model folders (e.g., `flan_quick_int8`) are not present, it falls back to base HF models or a tiny Turkish template to ensure visible output.
+It will print a prompt, generate a one-liner and a report. If trained model folders are not present, it falls back to base HF models or a small Turkish template so you always get output.
 
 ## 📋 Data Format
 
@@ -177,13 +184,17 @@ The system enforces strict content policies:
 python cli.py prompt --telemetry data.jsonl --style resmi
 
 # Train models with quantization
-python cli.py train --train train.jsonl --val val.jsonl --quantize
+python cli.py train --train train.jsonl --val val.jsonl --quantize --epochs-flan 3 --epochs-mt5 2 --max-steps 0
 
 # Run inference
 python cli.py inference --telemetry sample.jsonl --output results.json
 
 # Run tests
 python cli.py test
+
+## 📚 Examples
+
+Additional demonstration and legacy scripts are moved into `examples/` to keep the root clean. Prefer `cli.py` and `random_demo.py` for day-to-day use. See `examples/README.md` for a list.
 ```
 
 ## 🧪 Testing
@@ -255,9 +266,9 @@ def generate_report(telemetry_data):
 
 ## 📊 Performance
 
-- **One-liner**: ~100ms on CPU (INT8), ≤32 tokens
-- **Report**: ~500ms on CPU (INT8), ≤192 tokens  
-- **Memory**: ~200MB per model (quantized)
+- **One-liner**: short output (≤32 tokens)
+- **Report**: medium output (≤192 tokens)
+- **Memory**: depends on model size; quantized copies save RAM
 - **Accuracy**: Depends on training data quality and domain match
 
 ## 🤝 Contributing

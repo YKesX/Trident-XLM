@@ -1,0 +1,5 @@
+3.0. Birincil Gerekçe
+Sistem, çoklu sensör kaynaklarından gelen tutarlı sinyalleri değerlendirerek yüksek güven seviyesine ulaşmıştır.
+4.0. Karara Etki Eden Faktörler
+Pozitif katkı: Termal İmza Analizi (+25.52%, EO (LWIR)), Doppler Tehdit (+10.28%, RADAR (Doppler))
+Negatif katkı: SpoofShield Düzeltmesi (-1.36%, Guard), Parazit/Karıştırma (-1.77%, RADAR)

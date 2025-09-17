@@ -103,6 +103,14 @@ def cmd_inference(args):
         telem, targets = load_telemetry_sample(args.telemetry)
         prompt = build_inputs_for_llm(telem, style=args.style)
         
+        # Quality fallback if output is too short or low-signal
+        def _poor(txt: str) -> bool:
+            if not txt:
+                return True
+            t = txt.strip()
+            # Require a bit more substance: length >= 40 and at least ~6 words
+            return (len(t) < 40) or (t.count(" ") < 5)
+
         print("🔄 Generating one-liner...")
         one_liner = None
         try:
@@ -115,10 +123,16 @@ def cmd_inference(args):
             except Exception as e2:
                 print(f"⚠️  One-liner fallback to HF base failed: {e2}")
                 one_liner = (
-                    f"Kalibre güven: vuruş={telem.p_hit_calib:.2f}, imha={telem.p_kill_calib:.2f}; "
-                    f"maske sonrası: vuruş={telem.p_hit_masked:.2f}, imha={telem.p_kill_masked:.2f}. "
+                    f"Kalibre güven skorları (vuruş={telem.p_hit_calib:.2f}, imha={telem.p_kill_calib:.2f}); "
+                    f"maske sonrası (vuruş={telem.p_hit_masked:.2f}, imha={telem.p_kill_masked:.2f}). "
                     f"Sahtecilik riski {telem.spoof_risk:.2f}."
                 )
+        if _poor(one_liner):
+            one_liner = (
+                f"Kalibre g\u00fcven skorlar\u0131 (vuru\u015f={telem.p_hit_calib:.2f}, imha={telem.p_kill_calib:.2f}); "
+                f"maske sonras\u0131 (vuru\u015f={telem.p_hit_masked:.2f}, imha={telem.p_kill_masked:.2f}). "
+                f"Sahtecilik riski {telem.spoof_risk:.2f}."
+            )
         print(f"✅ One-liner: {one_liner}")
         
         print("🔄 Generating report...")
@@ -137,6 +151,18 @@ def cmd_inference(args):
                     "4.0. Karara Etki Eden Faktörler\n"
                     "Pozitif/negatif katkılar, telemetriye göre yorumlanmıştır."
                 )
+        # Quality fallback regardless of exception outcome
+        if _poor(report):
+            pos = [c for c in telem.contributions if c.sign == "pos"]
+            neg = [c for c in telem.contributions if c.sign == "neg"]
+            s = [
+                "3.0. Birincil Gerekçe",
+                "Sistem, çoklu sensör kaynaklarından gelen tutarlı sinyalleri değerlendirerek yüksek güven seviyesine ulaşmıştır.",
+                "4.0. Karara Etki Eden Faktörler",
+                ("Pozitif katkı: " + ", ".join(f"{c.name} (+{c.value_pct:.2f}%, {c.modality})" for c in pos)) if pos else "Pozitif katkı yok.",
+                ("Negatif katkı: " + ", ".join(f"{c.name} ({c.value_pct:.2f}%, {c.modality})" for c in neg)) if neg else "Negatif katkı yok.",
+            ]
+            report = "\n".join(s)
         print(f"✅ Report: {report}")
         
         if args.output:

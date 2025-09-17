@@ -1,0 +1,1 @@
+Kalibre güven skorları (vuruş=0.77, imha=0.51); maske sonrası (vuruş=0.72, imha=0.47). Sahtecilik riski 0.10.
