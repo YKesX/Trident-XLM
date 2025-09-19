@@ -28,8 +28,15 @@ def load_jsonl(path, task_filter, limit: int | None = None):
             r = json.loads(line)
             if r.get("task") == task_filter:
                 rows.append(r)
-            if limit is not None and len(rows) >= limit:
+            # Only apply limit if it's specified and > 0
+            if limit is not None and limit > 0 and len(rows) >= limit:
                 break
+    
+    if len(rows) == 0:
+        raise ValueError(f"No samples found for task '{task_filter}' in {path}. "
+                        f"Check that the file exists and contains data with task='{task_filter}'")
+    
+    print(f"Loaded {len(rows)} samples for task '{task_filter}' from {path}")
     return Dataset.from_list(rows)
 
 def tokenize_fn(tok, max_in, max_out):
@@ -57,12 +64,30 @@ def main(args):
     )
     model = get_peft_model(model, lora)
 
-    train = load_jsonl(args.train, "one_liner", limit=(int(args.limit_train) if args.limit_train else None))
-    val   = load_jsonl(args.val,   "one_liner", limit=(int(args.limit_val) if args.limit_val else None))
+    # Parse limit arguments - treat 0 as None (no limit)
+    limit_train = int(args.limit_train) if args.limit_train and int(args.limit_train) > 0 else None
+    limit_val = int(args.limit_val) if args.limit_val and int(args.limit_val) > 0 else None
+    
+    train = load_jsonl(args.train, "one_liner", limit=limit_train)
+    val   = load_jsonl(args.val,   "one_liner", limit=limit_val)
+
+    # Validate dataset sizes before proceeding
+    if len(train) == 0:
+        raise ValueError(f"Training dataset is empty after loading from {args.train}")
+    if len(val) == 0:
+        raise ValueError(f"Validation dataset is empty after loading from {args.val}")
+    
+    print(f"Training with {len(train)} training samples and {len(val)} validation samples")
 
     tf = tokenize_fn(tok, max_in=512, max_out=128)  # Longer inputs for rich prompts
     train = train.map(tf, batched=True, remove_columns=train.column_names)
     val   = val.map(tf,   batched=True, remove_columns=val.column_names)
+    
+    # Final validation after tokenization
+    if len(train) == 0:
+        raise ValueError("Training dataset is empty after tokenization")
+    if len(val) == 0:
+        raise ValueError("Validation dataset is empty after tokenization")
 
     args_tr = TrainingArguments(
         output_dir=args.out,
