@@ -1,81 +1,81 @@
-# Trident-XLM: Turkish Explainability LLM
+# Trident-XLM: Türkçe Açıklanabilirlik LLM'i
 
-Trident-XLM is the explainability LLM layer for the TRIDENT-Net project, providing Turkish language summaries and reports based on telemetry data from multi-modal target detection systems.
+Trident-XLM, TRIDENT-Net projesinin açıklanabilirlik LLM katmanıdır ve çok modlu hedef tespit sistemlerinden gelen telemetri verilerine dayalı olarak Türkçe özetler ve raporlar sağlar.
 
-## 🎯 Overview
+## 🎯 Genel Bakış
 
-This package provides:
-- **Model-only NLP processing**: Consumes only telemetry facts, never operational placeholders
-- **Dual model architecture**: Fast one-liners (Flan-T5) + detailed reports (mT5)
-- **Turkish language generation**: Natural, technical prose for engineering audiences
-- **Content guards**: Prevents operational terminology and placeholder injection
-- **Multiple style presets**: `resmi`, `madde`, `anlatımcı` writing styles
-- **CPU-optimized inference**: INT8 quantized models for edge deployment
+Bu paket şunları sağlar:
+- **Yalnızca model tabanlı NLP işleme**: Sadece telemetri verilerini kullanır, operasyonel yer tutucuları asla
+- **İkili model mimarisi**: Hızlı tek satır özetler (Flan-T5) + detaylı raporlar (mT5)
+- **Türkçe dil üretimi**: Mühendislik hedef kitlesi için doğal, teknik düzyazı
+- **İçerik korumaları**: Operasyonel terminoloji ve yer tutucu enjeksiyonunu önler
+- **Çoklu stil ön ayarları**: `resmi`, `madde`, `anlatımcı` yazım stilleri
+- **CPU-optimized çıkarım**: Edge dağıtım için INT8 kuantize modeller
 
-## 🏗️ Architecture
+## 🏗️ Mimari
 
 ```
-Telemetry Data → Prompt Builder → LLM Models → Guards → Turkish Text
-     ↓                ↓              ↓          ↓         ↓
-- Probabilities   - Style-aware   - Flan-T5    - No ops  - One-liner
-- Flags           - Turkish       - mT5        - No <>   - Report  
-- Explanations    - Structured    - LoRA       - Style   - Safe
-- Contributions   - Facts-only    - Quantized  - Check   - Content
+Telemetri Verisi → Prompt Oluşturucu → LLM Modelleri → Korumalar → Türkçe Metin
+     ↓                ↓                    ↓          ↓           ↓
+- Olasılıklar     - Stil-bilinçli      - Flan-T5    - Ops yok   - Tek satır
+- Bayraklar       - Türkçe             - mT5        - <> yok    - Rapor  
+- Açıklamalar     - Yapılandırılmış    - LoRA       - Stil      - Güvenli
+- Katkılar        - Sadece gerçekler   - Kuantize   - Kontrol   - İçerik
 ```
 
-## 📦 Installation
+## 📦 Kurulum
 
 ```bash
-# Clone repository
+# Depoyu klonlayın
 git clone https://github.com/YKesX/Trident-XLM.git
 cd Trident-XLM
 
-# Install dependencies (Torch-only recommended)
+# Bağımlılıkları kurun (Yalnızca Torch önerilen)
 pip install -r requirements.txt
 
-# If you hit TensorFlow/NumPy ABI issues on Windows, force torch-only paths:
-# (CLI and scripts do this automatically)
+# Windows'ta TensorFlow/NumPy ABI sorunları yaşıyorsanız, torch-only yollarını zorlayın:
+# (CLI ve scriptler bunu otomatik yapar)
 # set TRANSFORMERS_NO_TF=1
 # set TRANSFORMERS_NO_FLAX=1
 # set USE_TORCH=1
 
-# Test installation
+# Kurulumu test edin
 python cli.py test
 ```
 
-## 🚀 Quick Start
+## 🚀 Hızlı Başlangıç
 
-### 1. Generate Training Data
+### 1. Eğitim Verisi Oluşturma
 
 ```bash
-# From telemetry JSONL file
+# Telemetri JSONL dosyasından
 python -m report_llm.build_dataset \
   --telemetry report_llm/data/telemetry.jsonl \
   --out_dir report_llm/data
 
-# Outputs: train.jsonl, val.jsonl, test.jsonl
+# Çıktılar: train.jsonl, val.jsonl, test.jsonl
 ```
 
-### 2. Train Models
+### 2. Modelleri Eğitme
 
 ```bash
-# One-liner model (Flan-T5 + LoRA)
+# Tek satır modeli (Flan-T5 + LoRA)
 python -m report_llm.train_flan_one_liner \
   --train report_llm/data/train.jsonl \
   --val report_llm/data/val.jsonl \
   --out report_llm/exports/flan_one_liner
 
-# Report model (mT5 + LoRA)
+# Rapor modeli (mT5 + LoRA)
 python -m report_llm.train_mt5_report \
   --train report_llm/data/train.jsonl \
   --val report_llm/data/val.jsonl \
   --out report_llm/exports/mt5_report
 ```
 
-### 3. Quantize for CPU
+### 3. CPU için Kuantizasyon
 
 ```bash
-# CPU-safe export (no GPU/bitsandbytes required)
+# CPU-güvenli export (GPU/bitsandbytes gerekli değil)
 python -m report_llm.quantize \
   --model_in report_llm/exports/flan_one_liner \
   --model_out report_llm/exports/flan_one_liner_int8
@@ -85,60 +85,60 @@ python -m report_llm.quantize \
   --model_out report_llm/exports/mt5_report_int8
 ```
 
-### 4. Run Inference
+### 4. Çıkarım Çalıştırma
 
 ```bash
-# Using CLI
+# CLI kullanarak
 python cli.py inference \
   --telemetry report_llm/data/telemetry.jsonl \
   --model-sync report_llm/exports/flan_one_liner_int8 \
   --model-async report_llm/exports/mt5_report_int8 \
   --output outputs/trained_inference.json
 
-# Using Python API
+# Python API kullanarak
 from report_llm import make_one_liner, make_report, build_inputs_for_llm
 
-# Build prompt from telemetry
+# Telemetriden prompt oluştur
 prompt = build_inputs_for_llm(telemetry_data, style="resmi")
 
-# Generate outputs
+# Çıktıları üret
 one_liner = make_one_liner("path/to/flan_model", prompt)
 report = make_report("path/to/mt5_model", prompt)
 ```
 
-### 5. Randomized Demo (no dataset needed)
+### 5. Rastgele Demo (veri seti gerekli değil)
 
-Quickly see Turkish outputs with synthetic telemetry:
+Sentetik telemetri ile Türkçe çıktıları hızlıca görün:
 
 ```powershell
 python .\random_demo.py
 ```
 
-It will print a prompt, generate a one-liner and a report. If trained model folders are not present, it falls back to base HF models or a small Turkish template so you always get output.
+Bir prompt yazdırır, tek satır ve rapor üretir. Eğitilmiş model klasörleri mevcut değilse, temel HF modellerine veya küçük Türkçe şablona geri döner, böylece her zaman çıktı alırsınız.
 
-## 📋 Data Format
+## 📋 Veri Formatı
 
-### Input: TelemetryNLIn
+### Giriş: TelemetryNLIn
 
 ```python
 from report_llm.types import TelemetryNLIn, Contribution
 
 telemetry = TelemetryNLIn(
-    # Core probabilities (calibrated by pipeline)
+    # Çekirdek olasılıklar (pipeline tarafından kalibre edilmiş)
     p_hit_calib=0.82, p_kill_calib=0.74,
     p_hit_masked=0.78, p_kill_masked=0.71,
     spoof_risk=0.15,
     
-    # Quality flags
+    # Kalite bayrakları
     flags={"mask_applied": True, "roi_coverage": 0.83},
     
-    # Explainability summaries
+    # Açıklanabilirlik özetleri
     exp={"attn_hotspots": ["burun", "gövde"], "gradcam_roi": "merkez"},
     
-    # Metadata safe for NL use
+    # NL kullanımı için güvenli metadata
     meta={"sensor_mode": "RGB+IR", "speed_kph": 45},
     
-    # Scored contributions
+    # Puanlanmış katkılar
     contributions=[
         Contribution("RCS", "RADAR (Ka-band)", "pos", 39.40, "güçlü yansıma"),
         Contribution("Gürültü", "EO (LWIR)", "neg", -8.25, "atmosferik")
@@ -146,151 +146,151 @@ telemetry = TelemetryNLIn(
 )
 ```
 
-### Output: Turkish Text
+### Çıkış: Türkçe Metin
 
 ```
-One-liner: "Yüksek güvenilirlik seviyesinde hedef tespiti gerçekleştirildi."
+Tek satır: "Yüksek güvenilirlik seviyesinde hedef tespiti gerçekleştirildi."
 
-Report: "Birincil Gerekçe: Radar kesit alanı ve Doppler frekans ölçümleri 
+Rapor: "Birincil Gerekçe: Radar kesit alanı ve Doppler frekans ölçümleri 
 güçlü ve tutarlı sinyal karakteristikleri göstermiştir..."
 ```
 
-## 🛡️ Content Guards
+## 🛡️ İçerik Korumaları
 
-The system enforces strict content policies:
+Sistem sıkı içerik politikaları uygular:
 
-### Forbidden Content
-- **Operational terms**: `ateş`, `ateşle`, `nişan`, `vur`, `angaje ol`
-- **Angle brackets**: `<system>`, `<gun>`, `<operator>`, etc.
-- **Tactical advice**: System provides only technical assessment
+### Yasak İçerik
+- **Operasyonel terimler**: `ateş`, `ateşle`, `nişan`, `vur`, `angaje ol`
+- **Açı parantezleri**: `<system>`, `<gun>`, `<operator>`, vb.
+- **Taktiksel tavsiye**: Sistem yalnızca teknik değerlendirme sağlar
 
-### Allowed Content
-- **Technical terms**: `RCS`, `Doppler`, `LWIR`, `SpoofShield`
-- **Assessment language**: Confidence levels, signal quality, factors
-- **Turkish prose**: Natural engineering-focused text
+### İzin Verilen İçerik
+- **Teknik terimler**: `RCS`, `Doppler`, `LWIR`, `SpoofShield`
+- **Değerlendirme dili**: Güven seviyeleri, sinyal kalitesi, faktörler
+- **Türkçe düzyazı**: Doğal mühendislik odaklı metin
 
-## 🎨 Style Presets
+## 🎨 Stil Ön Ayarları
 
-| Style | Description | Use Case |
-|-------|-------------|----------|
-| `resmi` | Formal, official tone | Reports, documentation |
-| `madde` | Bullet-point style | Quick summaries |
-| `anlatımcı` | Narrative, explanatory | Training materials |
+| Stil | Açıklama | Kullanım Alanı |
+|-------|----------|---------|
+| `resmi` | Resmi, resmî ton | Raporlar, dokümantasyon |
+| `madde` | Madde işareti stili | Hızlı özetler |
+| `anlatımcı` | Anlatısal, açıklayıcı | Eğitim materyalleri |
 
-## 🔧 CLI Usage
+## 🔧 CLI Kullanımı
 
 ```bash
-# Generate prompt from telemetry
+# Telemetriden prompt üret
 python cli.py prompt --telemetry data.jsonl --style resmi
 
-# Train models with quantization
+# Kuantizasyonla modelleri eğit
 python cli.py train --train train.jsonl --val val.jsonl --quantize --epochs-flan 3 --epochs-mt5 2 --max-steps 0
 
-# Run inference
+# Çıkarım çalıştır
 python cli.py inference --telemetry sample.jsonl --output results.json
 
-# Run tests
+# Testleri çalıştır
 python cli.py test
 
-## 📚 Examples
+## 📚 Örnekler
 
-Additional demonstration and legacy scripts are moved into `examples/` to keep the root clean. Prefer `cli.py` and `random_demo.py` for day-to-day use. See `examples/README.md` for a list.
+Ek gösterim ve eski scriptler, kökü temiz tutmak için `examples/` klasörüne taşınmıştır. Günlük kullanım için `cli.py` ve `random_demo.py`'yi tercih edin. Liste için `examples/README.md`'ye bakın.
 ```
 
-## 🧪 Testing
+## 🧪 Test Etme
 
 ```bash
-# Run all tests
+# Tüm testleri çalıştır
 python cli.py test
 
-# Core functionality (no ML dependencies)
+# Çekirdek işlevsellik (ML bağımlılıkları yok)
 python test_core.py
 
-# Logic validation 
+# Mantık doğrulama 
 python test_logic.py
 
-# Comprehensive unit tests
+# Kapsamlı birim testleri
 python report_llm/tests/test_comprehensive.py
 ```
 
-## 📁 Project Structure
+## 📁 Proje Yapısı
 
 ```
 Trident-XLM/
-├── report_llm/              # Core package
-│   ├── types.py             # Data structures
-│   ├── prompt_builder.py    # Prompt generation
-│   ├── build_dataset.py     # Training data creation
-│   ├── train_flan_one_liner.py  # One-liner training
-│   ├── train_mt5_report.py  # Report training
-│   ├── summarizer_sync.py   # Fast inference
-│   ├── summarizer_async.py  # Async inference
-│   ├── quantize.py          # Model quantization
-│   ├── style_guard.py       # Content validation
-│   ├── data/                # Training data
-│   ├── exports/             # Trained models
-│   └── tests/               # Unit tests
-├── cli.py                   # Command-line interface
-├── test_core.py             # Core functionality test
-├── test_logic.py            # Logic validation test
-├── requirements.txt         # Dependencies
-└── README.md               # This file
+├── report_llm/              # Çekirdek paket
+│   ├── types.py             # Veri yapıları
+│   ├── prompt_builder.py    # Prompt üretimi
+│   ├── build_dataset.py     # Eğitim verisi oluşturma
+│   ├── train_flan_one_liner.py  # Tek satır eğitimi
+│   ├── train_mt5_report.py  # Rapor eğitimi
+│   ├── summarizer_sync.py   # Hızlı çıkarım
+│   ├── summarizer_async.py  # Asenkron çıkarım
+│   ├── quantize.py          # Model kuantizasyonu
+│   ├── style_guard.py       # İçerik doğrulama
+│   ├── data/                # Eğitim verisi
+│   ├── exports/             # Eğitilmiş modeller
+│   └── tests/               # Birim testleri
+├── cli.py                   # Komut satırı arayüzü
+├── test_core.py             # Çekirdek işlevsellik testi
+├── test_logic.py            # Mantık doğrulama testi
+├── requirements.txt         # Bağımlılıklar
+└── README.md               # Bu dosya
 ```
 
-## 🔄 Integration with TRIDENT-Net
+## 🔄 TRIDENT-Net ile Entegrasyon
 
-For integration into the main TRIDENT-Net pipeline:
+Ana TRIDENT-Net pipeline'ına entegrasyon için:
 
-1. **Replace stub reporter** in `trident/xai_text/small_llm_reporter.py`
-2. **Enable in config**: Set `SmallLLMReporter.enabled: true` in `tasks.yml`  
-3. **Wire outputs**: Add `report` field to output schema
-4. **Load models**: Use quantized models for CPU inference
+1. **Stub reporter'ı değiştir** `trident/xai_text/small_llm_reporter.py` içinde
+2. **Config'de etkinleştir**: `tasks.yml` içinde `SmallLLMReporter.enabled: true` ayarla  
+3. **Çıktıları bağla**: Çıktı şemasına `report` alanı ekle
+4. **Modelleri yükle**: CPU çıkarımı için kuantize modelleri kullan
 
 ```python
-# Example integration
+# Örnek entegrasyon
 from report_llm import make_one_liner, build_inputs_for_llm
 
 def generate_report(telemetry_data):
     prompt = build_inputs_for_llm(telemetry_data, style="resmi")
     one_liner = make_one_liner(MODEL_SYNC_PATH, prompt)
-    # Queue async report generation...
+    # Asenkron rapor üretimini kuyruğa al...
     return one_liner
 ```
 
-## 🚫 Limitations
+## 🚫 Sınırlamalar
 
-- **Model-only scope**: Does not handle `<angle>` placeholders or timing injection
-- **Turkish language**: Optimized for Turkish technical writing only
-- **Telemetry-dependent**: Requires structured telemetry input format
-- **No operational output**: Intentionally avoids tactical/operational language
+- **Yalnızca model kapsamı**: `<angle>` yer tutucuları veya zamanlama enjeksiyonunu işlemez
+- **Türkçe dil**: Yalnızca Türkçe teknik yazım için optimize edilmiştir
+- **Telemetri-bağımlı**: Yapılandırılmış telemetri giriş formatı gerektirir
+- **Operasyonel çıktı yok**: Kasıtlı olarak taktik/operasyonel dilden kaçınır
 
-## 📊 Performance
+## 📊 Performans
 
-- **One-liner**: short output (≤32 tokens)
-- **Report**: medium output (≤192 tokens)
-- **Memory**: depends on model size; quantized copies save RAM
-- **Accuracy**: Depends on training data quality and domain match
+- **Tek satır**: kısa çıktı (≤32 token)
+- **Rapor**: orta uzunlukta çıktı (≤192 token)
+- **Bellek**: model boyutuna bağlıdır; kuantize kopyalar RAM tasarrufu sağlar
+- **Doğruluk**: Eğitim verisi kalitesi ve alan eşleşmesine bağlıdır
 
-## 🤝 Contributing
+## 🤝 Katkıda Bulunma
 
-1. Follow existing code structure and patterns
-2. Add tests for new functionality
-3. Ensure Turkish language output quality
-4. Validate guard policies are enforced
-5. Test with representative telemetry data
+1. Mevcut kod yapısı ve kalıplarını takip edin
+2. Yeni işlevsellik için testler ekleyin
+3. Türkçe dil çıktısı kalitesini sağlayın
+4. Koruma politikalarının uygulandığını doğrulayın
+5. Temsili telemetri verisi ile test edin
 
-## 📄 License
+## 📄 Lisans
 
-See [LICENSE](LICENSE) file for details.
+Detaylar için [LICENSE](LICENSE) dosyasına bakın.
 
-## 🆘 Support
+## 🆘 Destek
 
-For issues related to:
-- **Training/Inference**: Check model paths and data format
-- **Guards failing**: Verify output contains no forbidden content  
-- **Integration**: Ensure telemetry data matches expected schema
-- **Performance**: Consider using quantized models and CPU optimization
+Şunlarla ilgili sorunlar için:
+- **Eğitim/Çıkarım**: Model yollarını ve veri formatını kontrol edin
+- **Korumalar başarısız oluyor**: Çıktının yasak içerik içermediğini doğrulayın  
+- **Entegrasyon**: Telemetri verisinin beklenen şemaya uyduğundan emin olun
+- **Performans**: Kuantize modelleri ve CPU optimizasyonunu kullanmayı düşünün
 
 ---
 
-**Trident-XLM** - Turkish explainability LLM for multi-modal target detection systems.
+**Trident-XLM** - Çok modlu hedef tespit sistemleri için Türkçe açıklanabilirlik LLM'i.
